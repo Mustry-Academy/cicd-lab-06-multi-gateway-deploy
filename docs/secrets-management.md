@@ -2,8 +2,8 @@
 
 Reference reading for Lab 06. This is the "why + how" behind Part 1 of the
 assignment. It describes the target state; some repo pieces are still marked
-TODO. The Wilms production repo (wilms-ignition-repo) is the reference
-implementation for the full pattern.
+TODO. A production Ignition repo we maintain (shown on screen during the
+teaching) is the reference implementation for the full pattern.
 
 ## 1. Three kinds of configuration
 
@@ -51,22 +51,22 @@ the real value in a gitignored `.env`. Good: out of Git. Still leaks into:
 `docker inspect`, `docker compose config`, the container's process environment
 (visible to anything that can read `/proc/1/environ` or trigger a debug dump).
 
-### Rung 2 — file-based secrets (files under `/run/secrets/`) — the best way we know
+### Rung 2 — file-based secrets (files under `/run/secrets/`)
 A top-level `secrets:` block in Compose, backed by files in the gitignored
 `secrets/` directory, mounted read-only at `/run/secrets/<name>` inside the
 container. Good: not in `docker inspect`, not in the process env. Works with
 plain `docker compose` — no Swarm needed for file-backed secrets — and the same
 file-at-a-known-path idea carries unchanged to Kubernetes secret volumes and to
-Ignition's file-type secret provider. That portability is why we treat this as
-the default production answer.
+Ignition's file-type secret provider. That portability is why it's the pattern
+our production gateways run.
 
 Many official images (Postgres included) accept a `_FILE` suffix on their env
 vars (e.g. `POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password`) so the
 value is read from the mounted file.
 
-Who fills the files: locally, committed dummy values (Wilms commits a
-`secrets/` folder of non-sensitive local-dev values so a fresh clone just
-works); on deployed environments, the infra team or the deploy workflow — a
+Who fills the files: locally, committed dummy values (our production repo
+commits a `secrets/` folder of non-sensitive local-dev values so a fresh clone
+just works); on deployed environments, the infra team or the deploy workflow — a
 `deploy.yml` step can materialize GitHub secrets into these files
 (`umask 177` + `printf '%s'`) right before `compose up`.
 
@@ -82,12 +82,12 @@ needs to store secret values inline. Two flavours matter for CI/CD:
 - **Referenced secrets** — the config stores a *reference*; the value itself
   comes from a secret provider at runtime, e.g. a **file** (which is exactly
   what a file-based secret is: a file under `/run/secrets/`). Real serialized
-  shape, from the Wilms repo:
+  shape, from our production repo (provider name anonymized):
 
   ```json
   "password": {
     "type": "Referenced",
-    "data": { "providerName": "WilmsSecrets", "secretName": "MSSQL_PASSWORD" }
+    "data": { "providerName": "PlantSecrets", "secretName": "MSSQL_PASSWORD" }
   }
   ```
 
