@@ -50,12 +50,16 @@ x-ignition-env: &ignition-env
     com.inductiveautomation.webdev,
     com.inductiveautomation.jdbc.postgresql,
     com.mussonindustrial.embr.charts,
+    com.mussonindustrial.embr.periscope,
     com.mustry.historian.timescaledb,
     com.cirruslink.mqtt.engine.gateway
-  # Embr-Periscope ships in third-party-modules/ but is deliberately NOT
-  # listed here or in services/modules.json — it is the spare module Part 3
-  # of the lab deploys, with license/cert acceptance done in modules.json
-  # rather than these env vars.
+  # Embr-Periscope is listed in GATEWAY_MODULES_ENABLED (a module absent
+  # from this list is force-disabled on every boot) but deliberately NOT in
+  # the ACCEPT_MODULE_* lists below: it is the spare module Part 3 of the
+  # lab deploys, and its license/cert acceptance happens in modules.json —
+  # headless, shipped by the pipeline — rather than via these env vars.
+  # Until then it sits quarantined ("license not yet accepted") — that's
+  # the seeded starting state, not a bug.
   ACCEPT_MODULE_LICENSES: >-
     com.mussonindustrial.embr.charts,
     com.mustry.historian.timescaledb,
