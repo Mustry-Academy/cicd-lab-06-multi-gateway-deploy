@@ -83,7 +83,7 @@ echo -e "${GREEN}migrate ${CMD_ARGS[*]} → ${DATABASE} (network: ${NETWORK})${N
 
 cid="$(docker create --network "$NETWORK" "$MIGRATE_IMAGE" \
   -path=/migrations -database "$DB_URL" "${CMD_ARGS[@]}")"
-# shellcheck disable=SC2329  # invoked via the EXIT trap
+# shellcheck disable=SC2329,SC2317  # invoked via the EXIT trap
 cleanup() { docker rm -f "$cid" > /dev/null 2>&1 || true; }
 trap cleanup EXIT
 
