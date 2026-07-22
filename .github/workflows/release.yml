@@ -11,8 +11,9 @@
 # migrate the database): with one pipeline, your steps ship to test and
 # production alike, instead of having to be pasted into two workflows.
 #
-# deploy.yml starts with the ci.yml validation gate, so the tagged commit is
-# re-validated before it touches production (tags never go through a PR).
+# No validation on the tag: you tag a commit that is already on main, and it
+# passed ci.yml on the PR that merged it — the tag just picks which validated
+# commit ships to production.
 #
 # Rollback: Actions → Deploy → Run workflow → pick the released tag under
 # "Use workflow from" → target: production.

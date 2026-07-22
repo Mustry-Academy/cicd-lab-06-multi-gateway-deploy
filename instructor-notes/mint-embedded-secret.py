@@ -15,7 +15,7 @@ Usage:
 
 Prints the flattened-JSON JWE. Paste it as the `data` object of
   "password": { "type": "Embedded", "data": { ...printed object... } }
-in the target resource's config.json, then scan (scripts/scan.sh config).
+in the target resource's config.json, then scan (scripts/scan.sh).
 
 Only gateways holding these key files (i.e. the LOCAL lab gateway, which
 boots with IGNITION_ROOT_KEY_PASSWORD) can decrypt the result — that

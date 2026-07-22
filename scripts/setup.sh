@@ -376,15 +376,15 @@ initial_scan() {
     if is_placeholder_api_key; then
         echo -e "${YELLOW}No API key in .env yet — skipping initial scan.${NC}"
         echo "  scripts/generate-api-keys.sh should have created one; run it, then:"
-        echo "    scripts/scan.sh both --gateway local"
+        echo "    scripts/scan.sh local"
         return 0
     fi
 
     echo -e "${GREEN}Triggering initial scan on local gateway...${NC}"
-    if ! "$SCRIPT_DIR/scan.sh" both --gateway local; then
+    if ! "$SCRIPT_DIR/scan.sh" local; then
         echo ""
         echo -e "${YELLOW}Initial scan failed (likely the key lacks scan permission).${NC}"
-        echo "  Fix the role for the API key, then run:  scripts/scan.sh both --gateway local"
+        echo "  Fix the role for the API key, then run:  scripts/scan.sh local"
     fi
 }
 
@@ -416,7 +416,8 @@ echo "  Username: ${ACTUAL_PG_USER:-ignition}  Password: ${ACTUAL_PG_PASS:-(see 
 echo ""
 echo "API keys (unique to this clone, generated into .env — never committed):"
 echo "  IGNITION_API_KEY_LOCAL / _TEST / _PRODUCTION — one per gateway;"
-echo "  scripts/scan.sh picks the right one via --gateway. For CI, copy the"
+echo "  scripts/scan.sh picks the right one from its argument"
+echo "  (local | test | production). For CI, copy the"
 echo "  _TEST and _PRODUCTION values from .env into the IGNITION_API_KEY"
 echo "  secret on the lab-gateway-test / lab-gateway-production GitHub"
 echo "  environments."
@@ -424,7 +425,7 @@ echo ""
 echo "Useful commands:"
 echo "  docker compose ps                          # check container state"
 echo "  docker logs -f lab06-gateway-local-development        # tail local gateway logs"
-echo "  scripts/scan.sh both               # rescan local (default)"
-echo "  scripts/scan.sh both --gateway test # rescan test"
+echo "  scripts/scan.sh                            # rescan local (default)"
+echo "  scripts/scan.sh test                       # rescan test"
 echo "  scripts/teardown.sh                        # stop the stack"
 echo "  scripts/teardown.sh --volumes              # stop and wipe persistent data"

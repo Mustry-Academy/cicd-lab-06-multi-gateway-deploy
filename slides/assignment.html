@@ -438,7 +438,7 @@ docker exec lab06-gateway-local-development ls -l /run/secrets/</pre></div>
 git status   <span class="cm"># → resources/<span class="grn">core</span>/ignition/secret-provider/LabSecrets/ ✓</span>
 <span class="cm">#    landed in local-development instead? move it:</span>
 mv services/config/resources/<span class="cmd2">{local-development,core}</span>/ignition/secret-provider
-./scripts/scan.sh config     <span class="cm"># gateway re-reads → still Valid</span></pre></div>
+./scripts/scan.sh           <span class="cm"># gateway re-reads → still Valid</span></pre></div>
         <div class="goal" style="margin-top:18px">
           <span class="badge">Names travel</span>
           <p>The provider and the references are ordinary config: they <b>deploy — but only from a collection the target inherits</b> (<span class="inlinecode">core</span>). The files behind them don't travel, and mustn't. 1C is about getting those files onto the develop host.</p>

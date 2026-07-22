@@ -137,7 +137,7 @@ as `ignition`, `TimescaleDB_Reports` as the read-only `reporting` user.
 
   ```bash
   mv services/config/resources/{local-development,core}/ignition/secret-provider
-  ./scripts/scan.sh config    # still Valid, now from core
+  ./scripts/scan.sh          # still Valid, now from core
   ```
 
   Finally, grep the exported config to prove no value leaked.
